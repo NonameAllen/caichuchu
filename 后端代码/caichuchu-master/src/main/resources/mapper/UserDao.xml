@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dish.demo.dao.UserDao">
+
+    <resultMap id="userMap" type="com.dish.demo.entity.User">
+        <id column="user_openID" property="user_openID"/>
+        <result column="user_name" property="user_name"/>
+        <result column="user_photo" property="user_photo"/>
+    </resultMap>
+
+    <select id="queryUser" resultMap="userMap">
+        SELECT user_openID,user_name,user_photo
+        FROM user
+    </select>
+    <select id="queryUserById" resultType="com.dish.demo.entity.User" resultMap="userMap">
+        SELECT user_openID, user_name,user_photo
+        FROM user
+        WHERE
+            user_openID=#{userID}
+    </select>
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="user_openID"
+            keyColumn="user_openID" parameterType="com.dish.demo.entity.User">
+        INSERT INTO
+            user(user_openID,user_name,user_photo)
+        VALUES
+            (#{user_openID},#{user_name}, #{user_photo})
+    </insert>
+    <update id="updataUser" parameterType="com.dish.demo.entity.User">
+        update user
+        <set>
+            <if test="user_name != null">user_name=#{user_name},</if>
+            <if test="user_photo != null">user_photo=#{user_photo}</if>
+        </set>
+        where user_openID=#{user_openID}
+    </update>
+    <delete id="deleteUser">
+        DELETE FROM
+            user
+        WHERE
+                user_openID =
+                #{user_openID}
+    </delete>
+</mapper>
